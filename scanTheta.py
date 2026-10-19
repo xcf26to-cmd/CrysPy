@@ -16,10 +16,9 @@ rate1 = []
 delta_angle = 0.2* u.deg
 
 step0 = Pi.Angle2Step(0, 0-5*delta_angle)
-#Pi.MoveTheta(step0)
+Pi.MoveTheta(step0)
 print(f"Initially moved to -{5*delta_angle} deg")
 p0, r0 = ScanLineSearcher(Pi)
-breakpoint()
 rate1.append(r0)
 
 for i in range(1,11):
