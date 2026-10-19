@@ -16,9 +16,10 @@ rate1 = []
 delta_angle = 0.2* u.deg
 
 step0 = Pi.Angle2Step(0, 0-5*delta_angle)
-Pi.MoveTheta(step0)
+#Pi.MoveTheta(step0)
 print(f"Initially moved to -{5*delta_angle} deg")
 p0, r0 = ScanLineSearcher(Pi)
+breakpoint()
 rate1.append(r0)
 
 for i in range(1,11):
@@ -27,7 +28,7 @@ for i in range(1,11):
     rate1.append(r)
     print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = +{(i)*delta_angle}")
     if (rate1[i-1] > 20) and (rate1[i] - rate1[i-1] < 0):
-        break()
+        break
         
 print(rate1)
 '''

@@ -133,14 +133,12 @@ def MoveSDDRateLineSearcher(Pi: PiMikro, axe, coord, coord_max):
         Pi.MoveThat(axe,coord)
         print(f"Moved {axe} to {coord} mm")
         coord_array.append(coord)
-        #print(coord_array)
         WSL.callps1(path="SDDmove/", name=f'rate', function=f'r')
         with open("C:/Users/XCF/SDDmove/rate.txt", "r") as f:
             rate = float(f.read().strip())
             print(f"Measured rate: {rate} Hz")
             rate_array.append(rate)
         f.close()
-        #print(rate_array)
         Pi.Sleeper(2)
         coord = coord + 2.5
 

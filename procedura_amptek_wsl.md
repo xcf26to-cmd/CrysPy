@@ -86,7 +86,7 @@ Deve comparire una riga con `ID 10c4:842a` (Silicon Labs DP5 Digital Pulse Proce
 ## 6. [NON-ADMIN, dentro WSL — terminale 1] Vai nella cartella del codice e testa la connessione
 
 ```bash
-cd /mnt/c/Users/XCF/Desktop/CrisPy/onWsl/
+cd /mnt/c/Users/XCF/Desktop/CrysPy/onWsl/
 python3 -c "from AmptekControl import SDD; s = SDD(); print(s.PingPong())"
 ```
 

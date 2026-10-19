@@ -4,4 +4,4 @@ Write-Output $folderpath
 Write-Output $livetime
 Write-Output $filename
 Write-Output $function
-wsl /mnt/c/Users/XCF/Desktop/CrisPy/onWsl/launch.sh $folderpath $livetime $filename $function
+wsl /mnt/c/Users/XCF/Desktop/CrysPy/onWsl/launch.sh $folderpath $livetime $filename $function
