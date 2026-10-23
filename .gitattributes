@@ -1,0 +1,3 @@
+# Script eseguiti dentro WSL: sempre fine riga Unix (LF)
+*.sh eol=lf
+onWsl/*.py eol=lf

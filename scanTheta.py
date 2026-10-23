@@ -16,6 +16,7 @@ rate1 = []
 delta_angle = 0.2* u.deg
 dir = 0
 
+ScanLineSearcher(Pi)
 step0 = Pi.Angle2Step(0, 0-5*delta_angle)
 Pi.MoveTheta(step0)
 print(f"Initially moved to -{5*delta_angle} deg")
@@ -41,7 +42,7 @@ for i in range(1,11):
         p, r = ScanLineSearcher(Pi)
         rate1.append(r)
         print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = -{(i-i0)*delta_angle}")
-        while (rate1[i] - rate1[i-1] > 0) and (rate[i] > 20):
+        while (rate1[i] - rate1[i-1] > 0) and (rate1[i] > 20):
             i+=1
             Pi.MoveTheta(Pi.Angle2Step(0, -delta_angle))
             p, r = ScanLineSearcher(Pi)
@@ -79,22 +80,22 @@ if (np.max(rate1) < 20):
             print("Max rate found")
             dir = -1
             break
-    if (rate1[-1] - rate1[-2] > 0) and (rate1[-1] > 20):
-        #caso 3.2: il rate aumenta alla fine dello scan, deve continuare
-        print("Max rate is after the scan, continuing")
-        i+=1
-        Pi.MoveTheta(Pi.Angle2Step(0, delta_angle))
-        p, r = ScanLineSearcher(Pi)
-        rate1.append(r)
-        print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = +{(i)*delta_angle}")
-        while (rate1[i-1] > 20) and (rate1[i] - rate1[i-1] > 0):
+        if (rate1[-1] - rate1[-2] > 0) and (rate1[-1] > 20):
+            #caso 3.2: il rate aumenta alla fine dello scan, deve continuare
+            print("Max rate is after the scan, continuing")
             i+=1
             Pi.MoveTheta(Pi.Angle2Step(0, delta_angle))
             p, r = ScanLineSearcher(Pi)
             rate1.append(r)
             print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = +{(i)*delta_angle}")
-        dir = -1
-        break
+            while (rate1[i-1] > 20) and (rate1[i] - rate1[i-1] > 0):
+                i+=1
+                Pi.MoveTheta(Pi.Angle2Step(0, delta_angle))
+                p, r = ScanLineSearcher(Pi)
+                rate1.append(r)
+                print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = +{(i)*delta_angle}")
+            dir = -1
+            break
     if (np.max(rate1) < 20):
         #caso 3.3: la riga non è nel range in cui si è fatto lo scan in angolo, serve tornare indietro per vedere se è prima
         print(f"Max rate not found, changing direction and moving by -{14*delta_angle}")
@@ -109,34 +110,28 @@ if (np.max(rate1) < 20):
                 print("Max rate found")
                 dir = +1
                 break
-        if (rate1[-1] - rate1[-2] > 0) and (rate1[-1] > 20):
-            #caso 3.3.2: il rate aumenta alla fine dello scan, deve continuare
-            print("Max rate is after the scan, continuing")
-            i+=1
-            Pi.MoveTheta(Pi.Angle2Step(0, -delta_angle))
-            p, r = ScanLineSearcher(Pi)
-            rate1.append(r)
-            print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = -{(i-i1)*delta_angle}")
-            while (rate1[i-1] > 20) and (rate1[i] - rate1[i-1] > 0):
+            if (rate1[-1] - rate1[-2] > 0) and (rate1[-1] > 20):
+                #caso 3.3.2: il rate aumenta alla fine dello scan, deve continuare
+                print("Max rate is after the scan, continuing")
                 i+=1
                 Pi.MoveTheta(Pi.Angle2Step(0, -delta_angle))
                 p, r = ScanLineSearcher(Pi)
                 rate1.append(r)
                 print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = -{(i-i1)*delta_angle}")
-            dir = +1
-            break 
+                while (rate1[i-1] > 20) and (rate1[i] - rate1[i-1] > 0):
+                    i+=1
+                    Pi.MoveTheta(Pi.Angle2Step(0, -delta_angle))
+                    p, r = ScanLineSearcher(Pi)
+                    rate1.append(r)
+                    print(f"fast scan... i ={i-1} Max rate = {r} Hz, Position = {p} mm, Angle = -{(i-i1)*delta_angle}")
+                dir = +1
+                break 
         
 t1 = time.time()
 print(f"First scan ended in {t1-t0} s")
-'''
 max_angle_rate = np.max(rate1)
-index = np.where(rate1 == max_angle_rate)[0][0]
-print(index)
-step_final = Pi.Angle2Step(0, -(len(rate1)-index -2) * delta_angle)
-Pi.MoveTheta(step_final)
-print(f"After fast scan, moved to {-(len(rate1)-index -2) * delta_angle}, the index after the max")
-print(f"Numero di step: {step_final}")
-'''
+print(f"Max rate of the first scan = {max_angle_rate} Hz")
+
 #Second scan
 rate2 = []
 delta_angle_2 = 0.05* u.deg
@@ -152,7 +147,7 @@ for i in range(0,8):
     rate2.append(r)
     print(f"fast scan... i ={i} Max rate = {r} Hz, Position = {p} mm, Angle = -{(i+1)*delta_angle_2}")
     if r > max_angle_rate*0.95:
-        exit()
+        break
 
 #se supera il massimo deve fermarsi e fare lo scan piccolo
 #se il rate aumenta agli estremi dello scan, continua lo scan

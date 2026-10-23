@@ -1,3 +1,6 @@
+import os, sys
+#repo root (parent of script/) so PiMove, Point, ... are importable from anywhere
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 from PiMove import PiMikro
 

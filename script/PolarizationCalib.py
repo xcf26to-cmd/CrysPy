@@ -1,3 +1,6 @@
+import os, sys
+#repo root (parent of script/) so PiMove, Point, ... are importable from anywhere
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """
 This script is made by XCF team to correctly position the crystal inside the chamber.
 It cycles trough a routine of energy measurements using the SDD and repositioning the crystal.

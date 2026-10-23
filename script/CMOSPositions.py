@@ -1,7 +1,9 @@
+import os, sys
+#repo root (parent of script/) so PiMove, Point, ... are importable from anywhere
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import argparse
 import os
 import sys
-sys.path.insert(0,r"C:\Users\XCF\Desktop\codes")
 
 from PiMove import PiMikro
 
